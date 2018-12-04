@@ -2,6 +2,7 @@ package com.epam.libranote.initializer;
 
 
 import com.epam.libranote.configuration.LogicAppConfiguration;
+import com.epam.libranote.configuration.SecurityJavaConfig;
 import com.epam.libranote.configuration.WebAppConfiguration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -16,7 +17,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext configWebApplicationContext = new AnnotationConfigWebApplicationContext();
-        configWebApplicationContext.register(LogicAppConfiguration.class, WebAppConfiguration.class);
+        configWebApplicationContext.register(
+                LogicAppConfiguration.class,
+                WebAppConfiguration.class,
+                SecurityJavaConfig.class
+
+        );
         configWebApplicationContext.setServletContext(servletContext);
         configWebApplicationContext.refresh();
 
