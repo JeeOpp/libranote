@@ -32,7 +32,7 @@ public class UserResource {
     }
 
     @PostMapping("/")
-    public void insertUser(@PathVariable SimpleUserDto simpleUserDto){
+    public void insertUser(@RequestParam SimpleUserDto simpleUserDto){
         User user = userConverter.convertToEntity(simpleUserDto);
         userService.insert(user);
     }

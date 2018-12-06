@@ -1,9 +1,5 @@
 package com.epam.libranote.configuration;
 
-import com.epam.libranote.exception.handler.CustomAccessDeniedHandler;
-import com.epam.libranote.security.RestAuthenticationEntryPoint;
-import com.epam.libranote.security.SavedRequestAwareAuthenticationSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,54 +19,16 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 @ComponentScan({"com.epam.libranote.security","com.epam.libranote.exception.handler"})
 public class SecurityJavaConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
-
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
-    @Autowired
-    private SavedRequestAwareAuthenticationSuccessHandler mySuccessHandler;
-
     private SimpleUrlAuthenticationFailureHandler myFailureHandler = new SimpleUrlAuthenticationFailureHandler();
-
-    public SecurityJavaConfig() {
-        super();
-        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
-    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin").password(encoder().encode("adminPass")).roles("ADMIN")
-                .and()
-                .withUser("user").password(encoder().encode("userPass")).roles("USER");
+
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .authenticationEntryPoint(restAuthenticationEntryPoint)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/api/**").denyAll()
-                //.antMatchers("/api/csrfAttacker*").permitAll()
-                //.antMatchers("/api/customer/**").permitAll()
-                //.antMatchers("/api/foos/**").authenticated()
-                //.antMatchers("/api/async/**").permitAll()
-                //.antMatchers("/api/admin/**").hasRole("ADMIN")
-                .and()
-                .formLogin()
-                .successHandler(mySuccessHandler)
-                .failureHandler(myFailureHandler)
-                .and()
-                .httpBasic()
-                .and()
-                .logout();
+
     }
 
     @Bean
